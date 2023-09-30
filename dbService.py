@@ -1,11 +1,11 @@
 import sqlite3
 
-dbName = "DigitStripsKFC/sizifs.db"
+dbName = "./sizifs.db"
 tableName = "questionAndAnswers"
 
 def fromCsvToDb():
     import pandas as pd
-    data = pd.read_csv ('DigitStripsKFC/baseh.csv')   
+    data = pd.read_csv ('./baseh.csv')   
     df = pd.DataFrame(data)
 
 
