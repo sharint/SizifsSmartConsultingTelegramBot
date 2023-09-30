@@ -1,8 +1,9 @@
 import sqlite3
 
-dbName = "DigitStripsKFC/sizifs.db"
+dbName = "sizifs.db"
 tableName = "questionAndAnswers"
 
+# Импорт базы данных из формата csv
 def fromCsvToDb():
     import pandas as pd
     data = pd.read_csv ('./baseh.csv')   
@@ -21,18 +22,16 @@ def fromCsvToDb():
                     data,
                     )
     con.commit()
+    con.close()
 
+# Содание таблицы бд
 def createTable():
     con = sqlite3.connect(dbName)
     cur = con.cursor()
     cur.execute("CREATE TABLE {0}(question varchar(255), answer varchar(255), contex varchar(255));".format(tableName))
-
     con.close()
 
-def getData():
-    con = sqlite3.connect(dbName)
-    cur = con.cursor()
-
+# Запись в таблицу бд
 def setData():
     con = sqlite3.connect(dbName)
     cur = con.cursor()
@@ -44,16 +43,7 @@ def setData():
     con.commit()
     con.close()
 
-def getData():
-    con = sqlite3.connect(dbName)
-    cur = con.cursor()
-    querry = """
-    SELECT question from {0};
-    """.format(tableName)
-    a = cur.execute(querry).fetchall()
-    con.close()
-    return a
-
+# Получение ответа из вопроса
 def getAnwerByQuestion(question):
     con = sqlite3.connect(dbName)
     cur = con.cursor()
@@ -62,7 +52,4 @@ def getAnwerByQuestion(question):
     """.format(tableName,question)
     a = cur.execute(querry).fetchone()
     con.close()
-    if a is None:
-        return "К сожалению, ничего не нашел!"
-    else:
-        return a[0]
+    return a[0] if a!=None else a
