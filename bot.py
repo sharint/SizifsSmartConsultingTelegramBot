@@ -11,7 +11,7 @@ language='ru_RU' # язык перевода
 # Выполняется когда пользователь пишет команды /start или /help
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
-    bot.reply_to(message, "Привет! Я бот-помощник sizif. Чем могу помочь?")
+    bot.reply_to(message, "Привет! Я бот-помощник sizif. Чем могу помочь?\nЗапиши голосовое сообщение или введи текст")
          
 # Выполняется когда пользователь отправляет текстовое сообщение
 @bot.message_handler(func=lambda m: True)
@@ -19,8 +19,7 @@ def echo_all(message):
     ans = dbService.getAnwerByQuestion(str(message.text).lower())
     if ans == None:
         ans = "К сожалению, ничего не нашел!"
-    else:
-        bot.send_message(message.chat.id,ans)
+    bot.send_message(message.chat.id,ans)
 
 # Выполняется когда пользователь отправляет голосовое сообщение
 @bot.message_handler(content_types=['voice'])
@@ -39,9 +38,8 @@ def voice_processing(message):
     # запрашиваем данные из базы
     ans = dbService.getAnwerByQuestion(str(text).lower())
     if ans == None:
-         ans = "К сожалению, ничего не нашел!"
-    else:
-        bot.send_message(message.chat.id,ans)
+        ans = "К сожалению, ничего не нашел!"
+    bot.send_message(message.chat.id,ans)
     # удаляем созданные файлы
     os.remove(file_name_full)
     os.remove(file_name_full_converted)
