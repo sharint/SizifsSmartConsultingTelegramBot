@@ -1,6 +1,6 @@
 import sqlite3
 
-dbName = "./sizifs.db"
+dbName = "DigitStripsKFC/sizifs.db"
 tableName = "questionAndAnswers"
 
 def fromCsvToDb():
@@ -62,8 +62,6 @@ def getAnwerByQuestion(question):
     """.format(tableName,question)
     a = cur.execute(querry).fetchone()
     con.close()
-    print(question)
-    print(a)
     if a is None:
         return "К сожалению, ничего не нашел!"
     else:

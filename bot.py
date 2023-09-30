@@ -11,23 +11,54 @@ language='ru_RU'
 
 GLOSSARIY = "Глоссарий"
 AI = "Исскуственный интелект"
+BACK = "Назад"
+
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
-	markup = types.ReplyKeyboardMarkup()
-	btn = types.KeyboardButton(GLOSSARIY)
-	markup.add(btn)
-	bot.reply_to(message, "Привет! Я бот-помощник sizif. Чем могу помочь?",reply_markup=markup)
+    markup = createStartMarkup()
+    bot.reply_to(message, "Привет! Я бот-помощник sizif. Чем могу помочь?",reply_markup=markup)
      
 @bot.message_handler(content_types=['text'])
 def func(message):
-	if(message.text == GLOSSARIY):
-		switchKeyboardbutton(message,AI)
-	if(message.text == AI):
-		switchKeyboardbutton(message,GLOSSARIY)
-	
+    if(message.text == GLOSSARIY):
+        markup = createBackMarkup()
+        bot.send_message(message.chat.id,text="Вы выбрали глоссарий, напшите что вы хотите найти",reply_markup=markup)
+        bot.register_next_step_handler(message, glossaryAnswer)
+    elif(message.text == AI):
+        markup = createBackMarkup()
+        bot.send_message(message.chat.id,text="Вы выбрали искусственый интелект, напшите что вы хотите найти",reply_markup=markup)
+        bot.register_next_step_handler(message, aiAnswer)
+    elif(message.text == BACK):
+        markup = createStartMarkup()
+        text = "Возвращаю в главное меню"
+        bot.send_message(message.chat.id,text=text,reply_markup=markup)
+        
+def glossaryAnswer(message):
+    text = message.text
+    if text == BACK:
+        markup = createStartMarkup()
+        bot.send_message(message.chat.id, text="Возвращаю назад",reply_markup=markup)
+        return
+    ans = dbService.getAnwerByQuestion(str(message.text).lower())
+    bot.send_message(message.from_user.id,text=ans)
+
+def aiAnswer(message):
+    text = message.text
+    if text == BACK:
+        markup = createStartMarkup()
+        bot.send_message(message.chat.id, text="Возвращаю назад",reply_markup=markup)
+        return
+    ans = "Вам ответил искусственый интелект"
+    bot.send_message(message.from_user.id,text=ans)
+
+    
+     
+    
+
 @bot.message_handler(func=lambda m: True)
 def echo_all(message):
+    
 	ans = dbService.getAnwerByQuestion(str(message.text).lower())
 	bot.send_message(message.chat.id,ans)
 	
@@ -62,11 +93,18 @@ def voice_processing(message):
     os.remove(file_name_full)
     os.remove(file_name_full_converted)
 
-def switchKeyboardbutton(message,buttonText):
-	markup = types.ReplyKeyboardMarkup()
-	btn = types.KeyboardButton(buttonText)
-	markup.add(btn)
-	text = "Теперь я беру данные из "+ buttonText
-	bot.send_message(message.chat.id,text=text,reply_markup=markup)
+def createStartMarkup():
+    markup = types.ReplyKeyboardMarkup()
+    glosBtn = types.KeyboardButton(GLOSSARIY)
+    aiBtn = types.KeyboardButton(AI)
+    markup.add(glosBtn,aiBtn)
+    return markup
+
+def createBackMarkup():
+    markup = types.ReplyKeyboardMarkup()
+    backBtn = types.KeyboardButton(BACK)
+    markup.add(backBtn)
+    return markup
+
 
 bot.infinity_polling()
