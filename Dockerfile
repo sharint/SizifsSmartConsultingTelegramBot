@@ -9,8 +9,7 @@ COPY . /
 
 RUN pip3 install -r requirements.txt
 
-RUN git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg
-# set a default environment variable for the name of your bot
+# set a default environment variable for the name
 ENV BOT_NAME='sizif-bot'
 
 # set the start command
