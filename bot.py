@@ -26,8 +26,8 @@ def echo_all(message):
 def voice_processing(message):
     print(os.getcwd())
     filename = str(uuid.uuid4())
-    file_name_full="/voice/"+filename+".ogg"
-    file_name_full_converted="/ready/"+filename+".wav"
+    file_name_full="./voice/"+filename+".ogg"
+    file_name_full_converted="./ready/"+filename+".wav"
     file_info = bot.get_file(message.voice.file_id)
     downloaded_file = bot.download_file(file_info.file_path)
     with open(file_name_full, 'wb') as new_file:
