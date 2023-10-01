@@ -24,9 +24,10 @@ def echo_all(message):
 # Выполняется когда пользователь отправляет голосовое сообщение
 @bot.message_handler(content_types=['voice'])
 def voice_processing(message):
+    print(os.getcwd())
     filename = str(uuid.uuid4())
-    file_name_full="./voice/"+filename+".ogg"
-    file_name_full_converted="./ready/"+filename+".wav"
+    file_name_full="/voice/"+filename+".ogg"
+    file_name_full_converted="/ready/"+filename+".wav"
     file_info = bot.get_file(message.voice.file_id)
     downloaded_file = bot.download_file(file_info.file_path)
     with open(file_name_full, 'wb') as new_file:
@@ -41,6 +42,7 @@ def voice_processing(message):
         ans = "К сожалению, ничего не нашел!"
     bot.send_message(message.chat.id,ans)
     # удаляем созданные файлы
+    
     os.remove(file_name_full)
     os.remove(file_name_full_converted)
 

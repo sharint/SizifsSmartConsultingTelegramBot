@@ -1,0 +1,3 @@
+Из папки SizifsSmartConsultingTelegramBot запустить команду 
+1) "docker build -t programonaut/count-bot ."
+2) "docker run --name count-bot programonaut/count-bot"
